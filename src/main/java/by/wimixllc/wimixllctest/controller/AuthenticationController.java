@@ -36,13 +36,13 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDto request) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-            User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+            User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
             Set<String> strings = new HashSet<>();
             user.getUserRoles().forEach(role -> strings.add(role.getRoleName()));
             String token = jwtTokenProvider.createToken(request.getPassword(), strings);
             Map<Object, Object> response = new HashMap<>();
-            response.put("email", request.getUsername());
+            response.put("email", request.getEmail());
             response.put("token", token);
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {

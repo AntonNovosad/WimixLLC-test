@@ -15,6 +15,7 @@
 package by.wimixllc.wimixllctest.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,19 +29,17 @@ import java.util.Set;
 
 import static javax.persistence.FetchType.EAGER;
 
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "users")
+@Entity(name = "Users")
+@Data @AllArgsConstructor @NoArgsConstructor
+@Table @Builder
 public class User implements UserDetails {
 
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "user_name", unique = true, nullable = false)
-    private String username;
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "first_name", nullable = false)
@@ -51,16 +50,9 @@ public class User implements UserDetails {
     private String phoneNumber;
 
     @ManyToMany(fetch = EAGER)
-    @JoinTable(
-            name = "users_user_role",
-            joinColumns = @JoinColumn(
-                    name = "user_id",
-                    referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "user_role_id",
-                    referencedColumnName = "id"
-            ))
+    @JoinTable(name = "users_role",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_role_id", referencedColumnName = "id")})
     private Set<Role> userRoles;
 
     @Override
@@ -70,6 +62,11 @@ public class User implements UserDetails {
             authorities.add(new SimpleGrantedAuthority(userRole.getRoleName()));
         });
         return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return getEmail();
     }
 
     @Override

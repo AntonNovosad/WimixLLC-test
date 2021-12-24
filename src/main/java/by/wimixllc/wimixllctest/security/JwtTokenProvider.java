@@ -40,7 +40,7 @@ public class JwtTokenProvider {
 
     public String createToken(String email, Set<String> userRoles) {
         Claims claims = Jwts.claims().setSubject(email);
-        claims.put(" userRoles", userRoles);
+        claims.put("userRoles", userRoles);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityMilliseconds * 1000);
         return Jwts.builder()
