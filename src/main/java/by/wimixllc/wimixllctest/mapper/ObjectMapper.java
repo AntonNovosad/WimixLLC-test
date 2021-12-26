@@ -1,4 +1,4 @@
-package by.wimixllc.wimixllctest.Mapper;
+package by.wimixllc.wimixllctest.mapper;
 
 import by.wimixllc.wimixllctest.dto.RegistrationRequestDto;
 import by.wimixllc.wimixllctest.dto.RegistrationResponseDto;

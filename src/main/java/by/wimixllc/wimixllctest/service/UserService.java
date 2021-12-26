@@ -1,6 +1,6 @@
 package by.wimixllc.wimixllctest.service;
 
-import by.wimixllc.wimixllctest.Mapper.ObjectMapper;
+import by.wimixllc.wimixllctest.mapper.ObjectMapper;
 import by.wimixllc.wimixllctest.dto.RegistrationRequestDto;
 import by.wimixllc.wimixllctest.dto.RegistrationResponseDto;
 import by.wimixllc.wimixllctest.entity.Role;
