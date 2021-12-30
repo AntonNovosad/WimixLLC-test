@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/home")
+@RequestMapping(value = "/home")
 public class UserController {
 
 
@@ -29,12 +29,14 @@ public class UserController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
-        return new ResponseEntity<>(userRepository.getById(userId), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public void getUserById(@PathVariable Long userId) {
+        userRepository.getById(userId);
     }
 
     @PutMapping("/user/update/{userId}")
-    public ResponseEntity<?> update(@PathVariable Long userId, UpdateUserRequestDto requestDto) {
-        return new ResponseEntity<>(userService.update(userId, requestDto), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@PathVariable Long userId, @RequestBody UpdateUserRequestDto updateUserRequestDto) {
+        userService.update(userId, updateUserRequestDto);
     }
 }

@@ -27,7 +27,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
     private final ObjectMapper objectMapper;
