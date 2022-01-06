@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/home")
+@RequestMapping(value = "/profile")
 public class AdminController {
 
     private final AdminService adminService;
@@ -14,7 +14,7 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @DeleteMapping("/user/delete/{userId}")
+    @DeleteMapping("/admin/delete/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteForm(@PathVariable Long userId) {
         adminService.delete(userId);
