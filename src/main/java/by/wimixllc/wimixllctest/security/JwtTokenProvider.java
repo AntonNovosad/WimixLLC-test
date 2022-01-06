@@ -3,6 +3,7 @@ package by.wimixllc.wimixllctest.security;
 import by.wimixllc.wimixllctest.security.exception.JwtAuthenticationException;
 import by.wimixllc.wimixllctest.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,8 @@ public class JwtTokenProvider {
     private String secretKey;
     @Value("${jwt.expiration}")
     private long validityMilliseconds;
+    @Value("${jwt.prefix}")
+    private String prefix;
 
     public JwtTokenProvider(@Qualifier("userDetailsServiceImpl") UserDetailsServiceImpl userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -38,9 +41,10 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String email, Set<String> userRoles) {
+    public String createToken(String userId, String email, Set<String> userRoles) {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("userRoles", userRoles);
+        claims.put("id", userId);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityMilliseconds * 1000);
         return Jwts.builder()
@@ -50,7 +54,6 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
-
 
     public boolean validateToken(String token) {
         try {
@@ -66,11 +69,20 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getEmail(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    public String getEmail(String bearerToken) {
+        String token = bearerToken.replace(prefix, "");
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     public String resolveToken(HttpServletRequest request) {
         return request.getHeader(authorizationHeader);
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 }
