@@ -35,7 +35,7 @@ public class AuthenticationService {
         User user = userRepository.findByEmail(authenticationRequestDto.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
         Set<String> strings = new HashSet<>();
         user.getUserRoles().forEach(role -> strings.add(role.getRoleName()));
-        String token = jwtTokenProvider.createToken(authenticationRequestDto.getPassword(), strings);
+        String token = jwtTokenProvider.createToken(user.getId().toString(), authenticationRequestDto.getEmail(), strings);
         Map<Object, Object> response = new HashMap<>();
         response.put("email", authenticationRequestDto.getEmail());
         response.put("token", token);
