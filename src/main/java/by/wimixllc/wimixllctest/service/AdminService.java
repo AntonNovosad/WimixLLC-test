@@ -18,6 +18,7 @@ public class AdminService {
         this.userRepository = userRepository;
     }
 
+
     public void delete(Long userId) {
         log.info("Delete user by id");
         Optional<User> user = userRepository.findById(userId);
