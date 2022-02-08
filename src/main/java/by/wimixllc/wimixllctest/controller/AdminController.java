@@ -2,10 +2,11 @@ package by.wimixllc.wimixllctest.controller;
 
 import by.wimixllc.wimixllctest.service.AdminService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/profile")
+@RequestMapping(value = "/profile/admin")
 public class AdminController {
 
     private final AdminService adminService;
@@ -14,9 +15,9 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @DeleteMapping("/admin/delete/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteForm(@PathVariable Long userId) {
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<?> deleteForm(@PathVariable Long userId) {
         adminService.delete(userId);
+        return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 }
