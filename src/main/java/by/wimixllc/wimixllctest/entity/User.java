@@ -18,21 +18,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Set;
 
 import static javax.persistence.FetchType.EAGER;
 
 @Entity(name = "Users")
-@Data @AllArgsConstructor @NoArgsConstructor
-@Table @Builder
-public class User implements UserDetails {
+@Table
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class User {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -55,37 +53,4 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "user_role_id", referencedColumnName = "id")})
     private Set<Role> userRoles;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        getUserRoles().forEach(userRole -> {
-            authorities.add(new SimpleGrantedAuthority(userRole.getRoleName()));
-        });
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return getEmail();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

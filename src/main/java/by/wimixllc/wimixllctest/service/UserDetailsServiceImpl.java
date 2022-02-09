@@ -1,5 +1,6 @@
 package by.wimixllc.wimixllctest.service;
 
+import by.wimixllc.wimixllctest.entity.UserDetailsImpl;
 import by.wimixllc.wimixllctest.entity.User;
 import by.wimixllc.wimixllctest.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             user.getUserRoles().forEach(userRole -> {
                 authorities.add(new SimpleGrantedAuthority(userRole.getRoleName()));
             });
-            return optionalUser.get();
+            return new UserDetailsImpl(user);
         }
     }
 }
